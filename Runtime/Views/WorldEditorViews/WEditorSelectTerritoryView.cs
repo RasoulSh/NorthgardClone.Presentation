@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Northgard.Presentation.Views.WorldEditorViews
 {
-    public class WEditorSelectTerritoryView : View
+    internal class WEditorSelectTerritoryView : View
     {
         [Inject] private IWorldEditorController _worldEditorController;
 

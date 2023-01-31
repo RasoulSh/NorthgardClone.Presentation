@@ -1,28 +1,18 @@
-﻿using Northgard.Core.Common.UnityExtensions;
+﻿using System.Collections.Generic;
 using Northgard.Interactor.Abstraction;
+using Northgard.Interactor.ViewModels.WorldViewModels;
 using Northgard.Presentation.Common.View;
 using Northgard.Presentation.Views.WorldEditorViews.SubViews;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace Northgard.Presentation.Views.WorldEditorViews
 {
-    public class WEditorSelectWorldView : View
+    internal class WEditorSelectWorldView : SelectorView<WorldPrefabViewModel, WorldPrefabSubView>
     {
         [Inject] private IWorldEditorController _worldEditorController;
-        [SerializeField] private WorldPrefabSubView subViewPrefab;
-        [SerializeField] private GridLayoutGroup grid;
-
-        public override void UpdateView()
-        {
-            var gridTransform = grid.transform;
-            gridTransform.DestroyAllChildren();
-            foreach (var worldPrefab in _worldEditorController.WorldPrefabs)
-            {
-                var newSubView = subViewPrefab.Instantiate(worldPrefab);
-                newSubView.transform.SetParent(gridTransform);
-            }
-        }
+        [SerializeField] private WorldPrefabSubView itemPrefab;
+        protected override WorldPrefabSubView ItemPrefab => itemPrefab;
+        protected override IEnumerable<WorldPrefabViewModel> DataItems => _worldEditorController.WorldPrefabs;
     }
 }

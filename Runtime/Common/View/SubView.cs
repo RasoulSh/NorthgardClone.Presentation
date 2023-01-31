@@ -2,7 +2,7 @@
 
 namespace Northgard.Presentation.Common.View
 {
-    public abstract class SubView<T> : MonoBehaviour
+    internal abstract class SubView<T> : MonoBehaviour
     {
         private T _data;
         public T Data

@@ -10,6 +10,7 @@ namespace Northgard.Presentation.Common.GUIPanelSystem
         [SerializeField] private bool initializeOnStart = true;
         [SerializeField] private Tweener tweener;
         private CanvasGroup _canvasGroup;
+        public CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>(); 
         public bool IsShown => isShown;
         public bool IsInitialized { get; private set; }
 
@@ -33,7 +34,6 @@ namespace Northgard.Presentation.Common.GUIPanelSystem
                 return false;
             }
             IsInitialized = true;
-            _canvasGroup = GetComponent<CanvasGroup>();
             tweener ??= GetComponent<Tweener>();
             if (tweener != null)
             {
@@ -51,8 +51,8 @@ namespace Northgard.Presentation.Common.GUIPanelSystem
 
         public bool IsInteractable
         {
-            get => _canvasGroup.interactable;
-            set => _canvasGroup.interactable = value;
+            get => CanvasGroup.interactable;
+            set => CanvasGroup.interactable = value;
         }
 
         public void Toggle(bool isShown, bool ignoreAnimate = false)
