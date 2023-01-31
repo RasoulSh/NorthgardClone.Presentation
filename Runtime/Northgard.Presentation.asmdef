@@ -1,0 +1,18 @@
+{
+    "name": "Northgard.Presentation",
+    "rootNamespace": "Northgard.Presentation",
+    "references": [
+        "GUID:64c98f1a23a76024d9df50a5cc9d95c5",
+        "GUID:20fa240a0eb0c734fbe4031eda1b044b",
+        "GUID:070154e96fe36c243b3bcc3d9e4f45c3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
