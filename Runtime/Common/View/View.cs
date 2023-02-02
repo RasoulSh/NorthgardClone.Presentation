@@ -1,4 +1,4 @@
-﻿using Northgard.Presentation.Common.GUIPanelSystem;
+﻿using UIToolkit.GUIPanelSystem;
 using UnityEngine;
 
 namespace Northgard.Presentation.Common.View

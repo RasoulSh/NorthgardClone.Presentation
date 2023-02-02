@@ -4,5 +4,7 @@
     {
         public event ConfirmDelegate OnConfirm;
         public delegate void ConfirmDelegate(T data);
+
+        void UpdateCaption(string caption);
     }
 }

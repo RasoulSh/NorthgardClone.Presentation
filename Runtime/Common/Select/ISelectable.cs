@@ -1,9 +1,10 @@
 ﻿namespace Northgard.Presentation.Common.Select
 {
-    internal interface ISelectable
+    public interface ISelectable
     {
         bool IsSelected { get; }
-        void Select();
-        void Deselect();
+        void Select(object sender);
+        void Deselect(object sender);
+        public delegate void SelectableDelegate(ISelectable selectable);
     }
 }

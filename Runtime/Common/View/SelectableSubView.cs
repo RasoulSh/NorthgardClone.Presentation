@@ -18,14 +18,16 @@ namespace Northgard.Presentation.Common.View
             selectButton.onClick.AddListener(Select);
         }
 
-        public void Select()
+        private void Select() => Select(this);
+
+        public void Select(object sender)
         {
             IsSelected = true;
             OnSelect?.Invoke(this);
             PlaySelectEffect();
         }
 
-        public void Deselect()
+        public void Deselect(object sender)
         {
             IsSelected = false;
             OnDeselect?.Invoke(this);

@@ -7,6 +7,7 @@ namespace Northgard.Presentation.Common.View
 {
     internal abstract class SelectorView<T,TS> : View, ISelectorView<T> where TS : SelectableSubView<T>
     {
+        [SerializeField] private Text captionLabel;
         [SerializeField] private GridLayoutGroup selectGrid;
         [SerializeField] private Button confirmButton;
         [SerializeField] private bool hideOnConfirm;
@@ -48,10 +49,15 @@ namespace Northgard.Presentation.Common.View
         {
             if (_currentSelectedItem != null)
             {
-                _currentSelectedItem.Deselect();
+                _currentSelectedItem.Deselect(this);
             }
             _currentSelectedItem = item as TS;
             confirmButton.interactable = true;
+        }
+
+        public void UpdateCaption(string caption)
+        {
+            captionLabel.text = caption;
         }
     }
 }
