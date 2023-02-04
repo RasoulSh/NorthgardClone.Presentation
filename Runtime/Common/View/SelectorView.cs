@@ -14,7 +14,7 @@ namespace Northgard.Presentation.Common.View
         protected abstract TS ItemPrefab { get; }
         protected abstract IEnumerable<T> DataItems { get; }
         private TS _currentSelectedItem;
-        public event ISelectorView<T>.ConfirmDelegate OnConfirm;
+        public ISelectorView<T>.ConfirmDelegate OnConfirm { private get; set; }
 
         protected virtual void Start()
         {

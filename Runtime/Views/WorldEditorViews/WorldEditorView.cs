@@ -18,7 +18,7 @@ namespace Northgard.Presentation.Views.WorldEditorViews
             IsInteractable = false;
             _worldSelector.UpdateCaption("Select the world");
             _worldSelector.Show();
-            _worldSelector.OnConfirm += SelectWorld;
+            _worldSelector.OnConfirm = SelectWorld;
         }
 
         public override void UpdateView()
@@ -31,7 +31,7 @@ namespace Northgard.Presentation.Views.WorldEditorViews
             _worldEditorController.SelectWorld(new SelectWorldViewModel() { Prefab = data });
             _territorySelector.UpdateCaption("Select the first territory");
             _territorySelector.Show();
-            _territorySelector.OnConfirm += SelectFirstTerritory;
+            _territorySelector.OnConfirm = SelectFirstTerritory;
         }
 
         private void SelectFirstTerritory(TerritoryPrefabViewModel data)

@@ -1,5 +1,4 @@
 ﻿using Northgard.Presentation.Common.Select;
-using UnityEngine;
 
 namespace Northgard.Presentation.UserInteraction.Common
 {

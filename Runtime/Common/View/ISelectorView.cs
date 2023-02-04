@@ -2,7 +2,7 @@
 {
     internal interface ISelectorView<T> : IView
     {
-        public event ConfirmDelegate OnConfirm;
+        public ConfirmDelegate OnConfirm { set; }
         public delegate void ConfirmDelegate(T data);
 
         void UpdateCaption(string caption);
