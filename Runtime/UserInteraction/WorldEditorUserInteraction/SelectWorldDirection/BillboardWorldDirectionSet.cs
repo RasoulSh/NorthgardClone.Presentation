@@ -4,10 +4,10 @@ using UIToolkit.Billboard;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Northgard.Presentation.UserInteraction.SelectWorldDirection
+namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.SelectWorldDirection
 {
     [Serializable]
-    public class BillboardWorldDirectionSet
+    internal class BillboardWorldDirectionSet
     {
         [SerializeField] private Billboard billboard;
         [SerializeField] private Button button;

@@ -1,12 +1,14 @@
 ﻿using Northgard.Interactor.Abstraction;
 using Northgard.Interactor.Enums.WorldEnums;
 using Northgard.Interactor.ViewModels.WorldViewModels;
+using Northgard.Presentation.Common.Panel;
 using Northgard.Presentation.Common.Select;
 using Northgard.Presentation.Common.View;
 using Northgard.Presentation.Common.VisualEffects.SelectShaderEffect;
 using Northgard.Presentation.UserInteraction.Common;
 using Northgard.Presentation.UserInteraction.Common.SelectableBehaviours;
-using Northgard.Presentation.UserInteraction.SelectWorldDirection;
+using Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.SelectWorldDirection;
+using Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.TerritoryOperations;
 using UIToolkit.InteractionHelpers;
 using UnityEngine;
 using Zenject;
@@ -16,8 +18,10 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
     public class WEditorUserInteractionManager : MonoBehaviour, IUserInteractionManager
     {
         [Inject] private IWorldEditorController _worldEditorController;
+        [Inject] private ITerritoryOperationPanel _territoryOperationPanel;
         [Inject] private ISelectWorldDirectionPanel _directionSelector;
         [Inject] private ISelectorView<TerritoryPrefabViewModel> _territorySelector;
+        [Inject] private IFocusView _focusPanelHandler;
         [SerializeField] private MouseInputBehaviour mouseInput;
         [SerializeField] private Shader selectShader;
         public ISelectable CurrentSelectedBehaviour { get; private set; }
@@ -29,7 +33,7 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
 
         private void Start()
         {
-            mouseInput.OnClick += OnClickedAnywhere;
+            mouseInput.OnClick += OnClickAnywhere;
             _worldEditorController.OnTerritoryAdded += MakeTerritorySelectable;
         }
 
@@ -46,19 +50,23 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             _currentSelectedTerritory = selectable;
             var availableDirections = _worldEditorController.GetTerritoryAvailableDirections(selectable.Data.Id);
             _directionSelector.Show(selectable.transform, availableDirections);
+            _territoryOperationPanel.Show(selectable.transform, new ITerritoryOperationPanel.TerritoryOperationConfig());
             _directionSelector.OnSelect = OnTerritoryDirectionSelected;
         }
 
         private void OnTerritoryDeselected(SelectableBehaviour<TerritoryViewModel> selectable)
         {
             _directionSelector.Hide();
+            _territoryOperationPanel.Hide();
         }
         
         private void OnTerritoryDirectionSelected(WorldDirection worldDirection)
         {
+            DeselectAsset(CurrentSelectedBehaviour, this);
             _currentSelectedDirection = worldDirection;
             _territorySelector.UpdateCaption("Select the territory to add");
-            _territorySelector.Show();
+            _territorySelector.ShowCloseButton();
+            _focusPanelHandler.Focus(_territorySelector);
             _territorySelector.OnConfirm = AddNewTerritory;
         }
 
@@ -74,7 +82,7 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
         }
 
 
-        private void OnClickedAnywhere(PointerInputBehaviour asset)
+        private void OnClickAnywhere(PointerInputBehaviour asset)
         {
             if (CurrentSelectedBehaviour == null) return;
             var currentAssetInput = CurrentSelectedBehaviour as PointerInputBehaviour;

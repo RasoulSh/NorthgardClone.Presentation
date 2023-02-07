@@ -4,7 +4,7 @@ using Northgard.Interactor.Enums.WorldEnums;
 using UIToolkit.GUIPanelSystem;
 using UnityEngine;
 
-namespace Northgard.Presentation.UserInteraction.SelectWorldDirection
+namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.SelectWorldDirection
 {
     [RequireComponent(typeof(GUIPanel))]
     internal class SelectWorldDirectionPanel : MonoBehaviour, ISelectWorldDirectionPanel
@@ -12,10 +12,10 @@ namespace Northgard.Presentation.UserInteraction.SelectWorldDirection
         [SerializeField] private BillboardWorldDirectionSet[] billboards;
         public ISelectWorldDirectionPanel.SelectDelegate OnSelect { private get; set; }
         private GUIPanel _panel;
+        private GUIPanel Panel => _panel ??= GetComponent<GUIPanel>();
 
         private void Start()
         {
-            _panel = GetComponent<GUIPanel>();
             foreach (var billboardSet in billboards)
             {
                 billboardSet.Initialize();
@@ -38,12 +38,12 @@ namespace Northgard.Presentation.UserInteraction.SelectWorldDirection
                 var isAvailable = allowedDirections.Contains(billboardSet.WorldDirection);
                 billboardSet.Billboard.CanShow = isAvailable;
             }
-            _panel.Toggle(true);
+            Panel.Toggle(true);
         }
 
         public void Hide()
         {
-            _panel.Toggle(false);
+            Panel.Toggle(false);
         }
     }
 }

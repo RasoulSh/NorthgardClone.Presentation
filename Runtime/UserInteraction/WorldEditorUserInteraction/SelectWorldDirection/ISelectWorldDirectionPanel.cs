@@ -2,7 +2,7 @@
 using Northgard.Interactor.Enums.WorldEnums;
 using UnityEngine;
 
-namespace Northgard.Presentation.UserInteraction.SelectWorldDirection
+namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.SelectWorldDirection
 {
     internal interface ISelectWorldDirectionPanel
     {

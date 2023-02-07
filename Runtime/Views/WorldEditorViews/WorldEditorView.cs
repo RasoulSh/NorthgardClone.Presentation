@@ -1,6 +1,7 @@
 ﻿using System;
 using Northgard.Interactor.Abstraction;
 using Northgard.Interactor.ViewModels.WorldViewModels;
+using Northgard.Presentation.Common.Panel;
 using Northgard.Presentation.Common.View;
 using UnityEngine;
 using Zenject;
@@ -12,12 +13,13 @@ namespace Northgard.Presentation.Views.WorldEditorViews
         [Inject] private IWorldEditorController _worldEditorController;
         [Inject] private ISelectorView<WorldPrefabViewModel> _worldSelector;
         [Inject] private ISelectorView<TerritoryPrefabViewModel> _territorySelector;
+        [Inject] private IFocusView _focusPanelHandler;
 
         private void Start()
         {
             IsInteractable = false;
             _worldSelector.UpdateCaption("Select the world");
-            _worldSelector.Show();
+            _focusPanelHandler.Focus(_worldSelector);
             _worldSelector.OnConfirm = SelectWorld;
         }
 
@@ -30,7 +32,7 @@ namespace Northgard.Presentation.Views.WorldEditorViews
         {
             _worldEditorController.SelectWorld(new SelectWorldViewModel() { Prefab = data });
             _territorySelector.UpdateCaption("Select the first territory");
-            _territorySelector.Show();
+            _focusPanelHandler.Focus(_territorySelector);
             _territorySelector.OnConfirm = SelectFirstTerritory;
         }
 

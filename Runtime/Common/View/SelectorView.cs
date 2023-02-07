@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Northgard.Presentation.Common.View
 {
-    internal abstract class SelectorView<T,TS> : View, ISelectorView<T> where TS : SelectableSubView<T>
+    internal abstract class SelectorView<T,TS> : ClosableView, ISelectorView<T> where TS : SelectableSubView<T>
     {
         [SerializeField] private Text captionLabel;
         [SerializeField] private GridLayoutGroup selectGrid;
@@ -24,11 +24,11 @@ namespace Northgard.Presentation.Common.View
 
         private void Confirm()
         {
-            OnConfirm?.Invoke(_currentSelectedItem.Data);
             if (hideOnConfirm)
             {
                 Hide();
             }
+            OnConfirm?.Invoke(_currentSelectedItem.Data);
         }
 
         public override void UpdateView()

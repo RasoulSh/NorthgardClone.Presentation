@@ -7,7 +7,7 @@ namespace Northgard.Presentation.Common.View
     internal abstract class View : MonoBehaviour, IView
     {
         private GUIPanel _panel;
-        private GUIPanel Panel => _panel ??= GetComponent<GUIPanel>();
+        public GUIPanel Panel => _panel ??= GetComponent<GUIPanel>();
         public bool IsShown => Panel.IsShown;
 
         public bool IsInteractable
@@ -15,6 +15,8 @@ namespace Northgard.Presentation.Common.View
             get => _panel.IsInteractable;
             set => _panel.IsInteractable = value;
         }
+        
+        public IView.ViewDelegate OnToggle { private get; set; }
 
         public void Show() => Toggle(true);
         
@@ -28,13 +30,18 @@ namespace Northgard.Presentation.Common.View
             }
         }
 
-        public void Toggle(bool isShown)
+        public virtual void Toggle(bool isShown)
         {
+            if (IsShown == isShown)
+            {
+                return;
+            }
             if (isShown)
             {
                 UpdateView();
             }
             Panel.Toggle(isShown);
+            OnToggle?.Invoke(this);
         }
         public abstract void UpdateView();
     }
