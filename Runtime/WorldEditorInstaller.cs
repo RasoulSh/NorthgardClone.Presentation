@@ -18,6 +18,7 @@ namespace Northgard.Presentation
         [SerializeField] private SelectWorldDirectionPanel worldDirectionPanel;
         [SerializeField] private WEditorSelectWorldView selectWorldView;
         [SerializeField] private WEditorSelectTerritoryView selectTerritoryView;
+        [SerializeField] private WEditorSelectNaturalDistrictView selectNaturalDistrictView;
         [SerializeField] private FocusView FocusPanelHandler;
         public override void InstallBindings()
         {
@@ -32,6 +33,8 @@ namespace Northgard.Presentation
                 .FromInstance(userInteractionManager).AsSingle();
             Container.Bind<ISelectorView<WorldPrefabViewModel>>().To<WEditorSelectWorldView>().FromInstance(selectWorldView).AsSingle();
             Container.Bind<ISelectorView<TerritoryPrefabViewModel>>().To<WEditorSelectTerritoryView>().FromInstance(selectTerritoryView).AsSingle();
+            Container.Bind<ISelectorView<NaturalDistrictPrefabViewModel>>().To<WEditorSelectNaturalDistrictView>()
+                .FromInstance(selectNaturalDistrictView).AsSingle();
         }
     }
 }

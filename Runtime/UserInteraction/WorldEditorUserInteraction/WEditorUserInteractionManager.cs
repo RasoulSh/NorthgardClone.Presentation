@@ -21,6 +21,7 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
         [Inject] private ITerritoryOperationPanel _territoryOperationPanel;
         [Inject] private ISelectWorldDirectionPanel _directionSelector;
         [Inject] private ISelectorView<TerritoryPrefabViewModel> _territorySelector;
+        [Inject] private ISelectorView<NaturalDistrictPrefabViewModel> _naturalDistrictSelector;
         [Inject] private IFocusView _focusPanelHandler;
         [SerializeField] private MouseInputBehaviour mouseInput;
         [SerializeField] private Shader selectShader;
@@ -50,8 +51,9 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             _currentSelectedTerritory = selectable;
             var availableDirections = _worldEditorController.GetTerritoryAvailableDirections(selectable.Data.Id);
             _directionSelector.Show(selectable.transform, availableDirections);
-            _territoryOperationPanel.Show(selectable.transform, new ITerritoryOperationPanel.TerritoryOperationConfig());
             _directionSelector.OnSelect = OnTerritoryDirectionSelected;
+            _territoryOperationPanel.Show(selectable.transform, new ITerritoryOperationPanel.TerritoryOperationConfig());
+            _territoryOperationPanel.OnNatureClick = ShowAddNaturalDistrictView;
         }
 
         private void OnTerritoryDeselected(SelectableBehaviour<TerritoryViewModel> selectable)
@@ -78,6 +80,25 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
                 Direction = _currentSelectedDirection,
                 Prefab = data,
                 SourceTerritoryId = _currentSelectedTerritory.Data.Id
+            });
+        }
+        
+        private void ShowAddNaturalDistrictView()
+        {
+            DeselectAsset(CurrentSelectedBehaviour, this);
+            _naturalDistrictSelector.UpdateCaption("Select the natural district to add");
+            _naturalDistrictSelector.ShowCloseButton();
+            _focusPanelHandler.Focus(_naturalDistrictSelector);
+            _naturalDistrictSelector.OnConfirm = AddNaturalDistrict;
+        }
+
+        private void AddNaturalDistrict(NaturalDistrictPrefabViewModel data)
+        {
+            _currentSelectedTerritory.Deselect(_naturalDistrictSelector);
+            _worldEditorController.NewNaturalDistrict(new CreateNaturalDistrictViewModel()
+            {
+                Prefab = data,
+                TerritoryId = _currentSelectedTerritory.Data.Id
             });
         }
 
