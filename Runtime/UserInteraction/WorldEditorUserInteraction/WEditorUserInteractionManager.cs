@@ -36,6 +36,7 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
         {
             mouseInput.OnClick += OnClickAnywhere;
             _worldEditorController.OnTerritoryAdded += MakeTerritorySelectable;
+            _worldEditorController.OnNaturalDistrictAdded += MakeNaturalDistrictSelectable;
         }
 
         private void MakeTerritorySelectable(TerritoryViewModel territoryViewModel)
@@ -44,6 +45,13 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             selectableTerritory.Data = territoryViewModel;
             selectableTerritory.OnSelect += OnTerritorySelected;
             selectableTerritory.OnDeselect += OnTerritoryDeselected;
+        }
+        
+        private void MakeNaturalDistrictSelectable(TerritoryViewModel territory, NaturalDistrictViewModel naturalDistrict)
+        {
+            var selectableNaturalDistrict =
+                _worldEditorController.AddComponentToNaturalDistrict<SelectableNaturalDistrict>(naturalDistrict.Id);
+            selectableNaturalDistrict.Data = naturalDistrict;
         }
         
         private void OnTerritorySelected(SelectableBehaviour<TerritoryViewModel> selectable)
