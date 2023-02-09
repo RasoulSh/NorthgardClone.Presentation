@@ -37,11 +37,15 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             mouseInput.OnClick += OnClickAnywhere;
             _worldEditorController.OnTerritoryAdded += MakeTerritorySelectable;
             _worldEditorController.OnNaturalDistrictAdded += MakeNaturalDistrictSelectable;
-            _worldEditorController.OnWorldLoaded += MakeWorldInteractable;
+            _worldEditorController.OnWorldLoaded += ResetWorldInteractions;
         }
 
-        private void MakeWorldInteractable()
+        private void ResetWorldInteractions()
         {
+            if (CurrentSelectedBehaviour != null)
+            {
+                CurrentSelectedBehaviour.Deselect(_worldEditorController);
+            }
             var world = _worldEditorController.CurrentWorld;
             foreach (var territory in world.Territories)
             {
