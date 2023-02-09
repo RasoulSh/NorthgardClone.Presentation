@@ -1,9 +1,9 @@
-﻿using System;
-using Northgard.Interactor.Abstraction;
+﻿using Northgard.Interactor.Abstraction;
 using Northgard.Interactor.ViewModels.WorldViewModels;
 using Northgard.Presentation.Common.Panel;
 using Northgard.Presentation.Common.View;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Northgard.Presentation.Views.WorldEditorViews
@@ -14,13 +14,39 @@ namespace Northgard.Presentation.Views.WorldEditorViews
         [Inject] private ISelectorView<WorldPrefabViewModel> _worldSelector;
         [Inject] private ISelectorView<TerritoryPrefabViewModel> _territorySelector;
         [Inject] private IFocusView _focusPanelHandler;
+        [SerializeField] private Button newWorldButton;
+        [SerializeField] private Button loadWorldButton;
+        [SerializeField] private Button saveWorldButton;
+        private const string TempSaveName = "TempWorld";
 
         private void Start()
         {
-            IsInteractable = false;
+            newWorldButton.onClick.AddListener(NewWorld);
+            loadWorldButton.onClick.AddListener(LoadWorld);
+            saveWorldButton.onClick.AddListener(SaveWorld);
+            saveWorldButton.interactable = false;
+        }
+
+        private void NewWorld()
+        {
             _worldSelector.UpdateCaption("Select the world");
+            if (_worldEditorController.CurrentWorld != null)
+            {
+                _worldSelector.ShowCloseButton();
+            }
             _focusPanelHandler.Focus(_worldSelector);
             _worldSelector.OnConfirm = SelectWorld;
+        }
+
+        private void LoadWorld()
+        {
+            _worldEditorController.LoadWorld(TempSaveName);
+            saveWorldButton.interactable = true;
+        }
+
+        private void SaveWorld()
+        {
+            _worldEditorController.SaveWorld(TempSaveName);
         }
 
         public override void UpdateView()
@@ -39,7 +65,7 @@ namespace Northgard.Presentation.Views.WorldEditorViews
         private void SelectFirstTerritory(TerritoryPrefabViewModel data)
         {
             _worldEditorController.SelectFirstTerritory(new SelectFirstTerritoryViewModel() { Prefab = data });
-            IsInteractable = true;
+            saveWorldButton.interactable = true;
         }
     }
 }
