@@ -1,5 +1,5 @@
-﻿using Northgard.Interactor.Abstraction;
-using Northgard.Interactor.Enums.WorldEnums;
+﻿using Northgard.Core.Enums;
+using Northgard.Interactor.Abstraction;
 using Northgard.Interactor.ViewModels.WorldViewModels;
 using Northgard.Presentation.Common.Panel;
 using Northgard.Presentation.Common.Select;
@@ -37,7 +37,7 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             mouseInput.OnClick += OnClickAnywhere;
             _worldEditorController.OnTerritoryAdded += MakeTerritorySelectable;
             _worldEditorController.OnNaturalDistrictAdded += MakeNaturalDistrictSelectable;
-            _worldEditorController.OnWorldLoaded += ResetWorldInteractions;
+            _worldEditorController.OnWorldChanged += ResetWorldInteractions;
         }
 
         private void ResetWorldInteractions()

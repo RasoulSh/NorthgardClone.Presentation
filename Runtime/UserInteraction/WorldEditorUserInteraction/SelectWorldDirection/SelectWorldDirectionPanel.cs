@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Northgard.Interactor.Enums.WorldEnums;
+using Northgard.Core.Enums;
 using UIToolkit.GUIPanelSystem;
 using UnityEngine;
 

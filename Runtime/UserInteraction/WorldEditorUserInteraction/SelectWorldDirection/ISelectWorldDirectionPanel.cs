@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Northgard.Interactor.Enums.WorldEnums;
+using Northgard.Core.Enums;
 using UnityEngine;
 
 namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.SelectWorldDirection

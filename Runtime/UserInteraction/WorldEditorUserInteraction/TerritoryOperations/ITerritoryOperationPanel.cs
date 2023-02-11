@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Northgard.Interactor.Enums.WorldEnums;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.TerritoryOperations
 {

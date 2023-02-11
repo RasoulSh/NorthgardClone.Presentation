@@ -1,5 +1,5 @@
 ﻿using System;
-using Northgard.Interactor.Enums.WorldEnums;
+using Northgard.Core.Enums;
 using UIToolkit.Billboard;
 using UnityEngine;
 using UnityEngine.UI;
