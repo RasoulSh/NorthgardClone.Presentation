@@ -84,6 +84,13 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             _directionSelector.OnSelect = OnTerritoryDirectionSelected;
             _territoryOperationPanel.Show(selectable.transform, new ITerritoryOperationPanel.TerritoryOperationConfig());
             _territoryOperationPanel.OnNatureClick = ShowAddNaturalDistrictView;
+            _territoryOperationPanel.OnDeleteClick = DeleteSelectedTerritory;
+        }
+
+        private void DeleteSelectedTerritory()
+        {
+            _worldEditorController.RemoveTerritory(_currentSelectedTerritory.Data.Id);
+            DeselectAsset(_currentSelectedTerritory, this);
         }
 
         private void OnTerritoryDeselected(SelectableBehaviour<TerritoryViewModel> selectable)
