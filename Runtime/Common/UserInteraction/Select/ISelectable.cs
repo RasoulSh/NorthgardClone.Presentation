@@ -1,4 +1,4 @@
-﻿namespace Northgard.Presentation.Common.Select
+﻿namespace Northgard.Presentation.Common.UserInteraction.Select
 {
     public interface ISelectable
     {

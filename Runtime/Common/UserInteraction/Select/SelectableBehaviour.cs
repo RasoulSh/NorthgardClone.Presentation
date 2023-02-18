@@ -1,11 +1,11 @@
 ﻿using UIToolkit.InteractionHelpers;
 using Zenject;
 
-namespace Northgard.Presentation.UserInteraction.Common
+namespace Northgard.Presentation.Common.UserInteraction.Select
 {
     public abstract class SelectableBehaviour<T> : ColliderInputBehaviour, ISelectableBehaviour<T>
     {
-        [Inject] private IUserInteractionManager _userInteractionManager;
+        [Inject] protected IUserInteractionManager userInteractionManager;
         public T Data { get; set; }
         public bool IsSelected { get; private set; }
         public event SelectableDelegate OnSelect;
@@ -21,9 +21,9 @@ namespace Northgard.Presentation.UserInteraction.Common
         {
             if (IsSelected) return;
             IsSelected = true;
-            if (sender != _userInteractionManager)
+            if (sender != userInteractionManager)
             {
-                _userInteractionManager.SelectAsset<T, SelectableBehaviour<T>>(this, this);
+                userInteractionManager.SelectAsset<T, SelectableBehaviour<T>>(this, this);
             }
             OnSelect?.Invoke(this);
         }
@@ -32,9 +32,9 @@ namespace Northgard.Presentation.UserInteraction.Common
         {
             if (IsSelected == false) return;
             IsSelected = false;
-            if (sender != _userInteractionManager)
+            if (sender != userInteractionManager)
             {
-                _userInteractionManager.DeselectAsset(this, this);
+                userInteractionManager.DeselectAsset(this, this);
             }
             OnDeselect?.Invoke(this);
         }

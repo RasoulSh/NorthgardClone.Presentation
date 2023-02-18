@@ -2,11 +2,13 @@
 using Northgard.Interactor.Abstraction;
 using Northgard.Interactor.ViewModels.WorldViewModels;
 using Northgard.Presentation.Common.Panel;
-using Northgard.Presentation.Common.Select;
+using Northgard.Presentation.Common.UserInteraction;
+using Northgard.Presentation.Common.UserInteraction.GameObjectRelocation;
+using Northgard.Presentation.Common.UserInteraction.Select;
 using Northgard.Presentation.Common.View;
-using Northgard.Presentation.Common.VisualEffects.SelectShaderEffect;
-using Northgard.Presentation.UserInteraction.Common;
-using Northgard.Presentation.UserInteraction.Common.SelectableBehaviours;
+using Northgard.Presentation.Common.VisualEffects;
+using Northgard.Presentation.Common.VisualEffects.GameObjectEffects;
+using Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.SelectableBehaviours;
 using Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.SelectWorldDirection;
 using Northgard.Presentation.UserInteraction.WorldEditorUserInteraction.TerritoryOperations;
 using UIToolkit.InteractionHelpers;
@@ -23,18 +25,19 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
         [Inject] private ISelectorView<TerritoryPrefabViewModel> _territorySelector;
         [Inject] private ISelectorView<NaturalDistrictPrefabViewModel> _naturalDistrictSelector;
         [Inject] private IFocusView _focusPanelHandler;
-        [SerializeField] private MouseInputBehaviour mouseInput;
-        [SerializeField] private Shader selectShader;
+        [Inject] private ISelectEffect<GameObject> _selectEffect;
+        [Inject] private IGameObjectMoveHandler _moveHandler;
+        [Inject] private ICommonInput _commonInput;
         public ISelectable CurrentSelectedBehaviour { get; private set; }
         public event ISelectable.SelectableDelegate OnSelect;
         public event ISelectable.SelectableDelegate OnDeselect;
-        private SelectByShader _currentSelectEffect;
         private SelectableBehaviour<TerritoryViewModel> _currentSelectedTerritory;
         private WorldDirection _currentSelectedDirection;
+        private NaturalDistrictPrefabViewModel _currentLocatingNaturalDistrict;
 
         private void Start()
         {
-            mouseInput.OnClick += OnClickAnywhere;
+            _commonInput.PrimaryInputPhysical.OnClick += OnClickAnywhere;
             _worldEditorController.OnTerritoryAdded += MakeTerritorySelectable;
             _worldEditorController.OnNaturalDistrictAdded += MakeNaturalDistrictSelectable;
             _worldEditorController.OnWorldChanged += ResetWorldInteractions;
@@ -116,16 +119,32 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             _naturalDistrictSelector.UpdateCaption("Select the natural district to add");
             _naturalDistrictSelector.ShowCloseButton();
             _focusPanelHandler.Focus(_naturalDistrictSelector);
-            _naturalDistrictSelector.OnConfirm = AddNaturalDistrict;
+            _naturalDistrictSelector.OnConfirm = NewNaturalDistrict;
         }
 
-        private void AddNaturalDistrict(NaturalDistrictPrefabViewModel data)
+        private void NewNaturalDistrict(NaturalDistrictPrefabViewModel data)
         {
+            _currentLocatingNaturalDistrict = data;
             _currentSelectedTerritory.Deselect(_naturalDistrictSelector);
+            var fakeObject = _worldEditorController.GenerateFakeNaturalDistrict(data.PrefabId);
+            // _selectEffect.StopSelectEffect();
+            _selectEffect.PlaySelectEffect(fakeObject);
+            var locator = _moveHandler.GenerateLocator(fakeObject, _currentSelectedTerritory.Data.Bounds, _selectEffect.CurrentSelectEffect);
+            locator.OnLocated = AddNaturalDistrict;
+            locator.OnFinished = delegate
+            {
+                _currentLocatingNaturalDistrict = null;
+            };
+        }
+
+        private void AddNaturalDistrict(GameObject locatingObject)
+        {
             _worldEditorController.NewNaturalDistrict(new CreateNaturalDistrictViewModel()
             {
-                Prefab = data,
-                TerritoryId = _currentSelectedTerritory.Data.Id
+                Prefab = _currentLocatingNaturalDistrict,
+                TerritoryId = _currentSelectedTerritory.Data.Id,
+                Position = locatingObject.transform.position,
+                Rotation = locatingObject.transform.rotation
             });
         }
 
@@ -151,8 +170,7 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             {
                 selectableBehaviour.Select(this);
             }
-            _currentSelectEffect = new SelectByShader(selectableBehaviour.gameObject, selectShader);
-            _currentSelectEffect.PlaySelectEffect();
+            _selectEffect.PlaySelectEffect(selectableBehaviour.gameObject);
         }
 
         public void DeselectAsset(ISelectable selectableBehaviour, object sender)
@@ -167,8 +185,7 @@ namespace Northgard.Presentation.UserInteraction.WorldEditorUserInteraction
             {
                 selectableBehaviour.Deselect(this);
             }
-            _currentSelectEffect.PlayDeselectEffect();
-            _currentSelectEffect = null;
+            _selectEffect.StopSelectEffect();
         }
     }
 }

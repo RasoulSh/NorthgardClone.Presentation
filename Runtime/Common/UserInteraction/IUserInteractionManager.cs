@@ -1,7 +1,8 @@
-﻿using Northgard.Presentation.Common.Select;
+﻿using Northgard.Presentation.Common.UserInteraction.Select;
+using Northgard.Presentation.Common.VisualEffects.GameObjectEffects;
 using UnityEngine;
 
-namespace Northgard.Presentation.UserInteraction.Common
+namespace Northgard.Presentation.Common.UserInteraction
 {
     public interface IUserInteractionManager
     {
